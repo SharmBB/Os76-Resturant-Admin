@@ -1,0 +1,152 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 10px 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 400px;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  color: #ff4c00;
+}
+
+.trial-banner {
+  background: #f3f6ff;
+  border: 1px solid #d5e0ff;
+  padding: 5px 15px;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #444;
+}
+
+.choose-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 4px 10px;
+  margin-left: 10px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.language-select {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 4px 8px;
+  font-size: 14px;
+}
+
+.icon {
+  font-size: 18px;
+  color: #555;
+  cursor: pointer;
+}
+
+.user-profile {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f7f7f7;
+  padding: 6px 12px;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.user-icon {
+  color: #555;
+  font-size: 20px;
+}
+
+/* Toogle Button */
+.online-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.toggle-switch {
+  width: 40px;
+  height: 20px;
+  background-color: #ccc;
+  border-radius: 20px;
+  position: relative;
+  transition: background 0.3s ease;
+}
+
+.toggle-switch.active {
+  background-color: #4caf50; /* Green when active */
+}
+
+.toggle-circle {
+  width: 18px;
+  height: 18px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  transition: all 0.3s ease;
+}
+
+.toggle-switch.active .toggle-circle {
+  transform: translateX(20px);
+}
+
+.status-text {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Search Box */
+.search-box {
+  display: flex;
+  align-items: center;
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 6px 10px;
+  width: 200px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.search-box:focus-within {
+  border: 1px solid #007bff;
+  background: #fff;
+}
+
+.search-icon {
+  font-size: 14px;
+  color: #666;
+  margin-right: 8px;
+}
+
+.search-box input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 100%;
+  font-size: 14px;
+  color: #333;
+}
