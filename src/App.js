@@ -6,8 +6,12 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 
 function App() {
   return (
-    
-    <Dashboard/>
+
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+      </Routes>
+    </BrowserRouter>
     
   );
 }
