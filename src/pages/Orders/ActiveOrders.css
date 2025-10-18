@@ -1,0 +1,159 @@
+.active-orders-page {
+  background: #fafafa;
+  min-height: 100vh;
+  padding: 20px 25px;
+  font-family: "Inter", sans-serif;
+}
+
+/* Order Type Tabs */
+.order-type-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 15px;
+  justify-content: center;
+  align-items: center;
+}
+
+.order-type-btn {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+  transition: all 0.2s ease-in-out;
+  font-weight: bold;
+}
+
+.order-type-btn.active {
+  background: #000;
+  color: #fff;
+  border-color: #000;
+}
+
+/* Status Tabs */
+.order-status-tabs {
+  display: flex;
+  align-items: center;
+  gap: 25px;
+  border-bottom: 1.5px solid #eaeaea;
+  padding-bottom: 8px;
+  margin-bottom: 25px;
+  position: relative;
+  justify-content: center;
+}
+
+.status-tab {
+  background: transparent;
+  border: none;
+  font-weight: bold;
+  font-size: 15px;
+  color: #333;
+  padding-bottom: 8px;
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+
+}
+
+.status-tab.active {
+  color: #ff6f00;
+  border-bottom: 2px solid #ff6f00;
+}
+
+.view-preorders {
+  position: absolute;
+  right: 0;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.view-preorders a {
+  color: #0c5fff;
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.filter-icon {
+  cursor: pointer;
+}
+
+/* Orders Container */
+.orders-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 18px;
+}
+
+.order-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+  border: 1px solid #eee;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-top: auto;
+}
+
+.order-id {
+  font-weight: bold;
+  color: #444;
+}
+
+.badges {
+  display: flex;
+  gap: 6px;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  color: #fff;
+}
+
+.badge.unpaid {
+  background: #d32f2f;
+}
+
+.badge.takeaway {
+  background: #333;
+}
+
+.customer-name {
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 3px;
+}
+
+.order-time {
+  color: #777;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.order-items p {
+  font-size: 14px;
+  margin-top: 8px;
+  color: #444;
+}
+
+.order-total {
+  font-weight: 600;
+  font-size: 15px;
+  margin-top: 8px;
+  text-align: right;
+}

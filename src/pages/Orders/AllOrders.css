@@ -1,0 +1,183 @@
+.order-details-container {
+  background: #f8f9fa;
+  padding: 25px;
+  border-radius: 12px;
+  min-height: 100vh;
+}
+
+/* Header */
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: -50px;
+}
+
+.order-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.order-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.accept-btn,
+.reject-btn,
+.icon-btn {
+  border: none;
+  outline: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.accept-btn {
+  background: #16a34a;
+  color: #fff;
+}
+
+.reject-btn {
+  background: #dc2626;
+  color: #fff;
+}
+
+.icon-btn {
+  background: #f1f5f9;
+  color: #1e293b;
+}
+
+.icon-btn.delete {
+  color: #dc2626;
+}
+
+/* Order Info */
+.order-info {
+  display: flex;
+  gap: 25px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  font-size: 14px;
+  margin-top: -30px;
+}
+
+.status-badge,
+.type-badge,
+.payment-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.status-badge.new {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.type-badge.takeaway {
+  background: #fef2f2;
+  color: #b91c1c;
+}
+
+.payment-badge.cod {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.payment-badge.unpaid {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Main Section */
+.order-main {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 25px;
+}
+
+.order-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 18px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.order-card h4 {
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+
+.order-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.order-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.order-card th,
+.order-card td {
+  text-align: left;
+  padding: 8px 0;
+  font-size: 14px;
+}
+
+.order-card th {
+  color: #64748b;
+  font-weight: 600;
+}
+
+.status-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  border-radius: 50%;
+}
+
+.dot.green {
+  background: #16a34a;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.summary-row.total {
+  border-top: 1px solid #e2e8f0;
+  margin-top: 8px;
+  padding-top: 8px;
+  font-weight: 700;
+}
+
+.edit-icon {
+  color: #2563eb;
+  cursor: pointer;
+}
+
+.order-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #475569;
+  font-size: 14px;
+}
