@@ -13,7 +13,8 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Dashboard />} />
-        <Route path="/add-menu-item" element={<MenuItemAddedForm />} />
+        <Route path="/menu-item-added" element={<MenuItemAddedForm />} />
+    
       </Routes>
     </BrowserRouter>
     
