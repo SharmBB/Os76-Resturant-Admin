@@ -1,0 +1,42 @@
+.sidebar {
+  width: 240px;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  padding-top: 15px;
+  overflow-y: auto;
+}
+
+.menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menu li {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 18px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: 0.2s ease;
+  border-left: 3px solid transparent;
+}
+
+.menu li:hover {
+  background: #f5f7ff;
+  border-left: 3px solid #007bff;
+  color: #007bff;
+}
+
+.menu li svg {
+  font-size: 16px;
+}
+
+
+
+

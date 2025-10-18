@@ -1,0 +1,63 @@
+.dashboard-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.body {
+  display: flex;
+  flex: 1;
+}
+
+.content {
+  flex: 1;
+  background: #f9f9f9;
+  padding: 25px;
+  overflow-y: auto;
+}
+
+/* DashboardLayout.css */
+.dashboard-container {
+  display: flex;
+  min-height: 100vh;
+  background: #f9fafb;
+}
+
+/* Sidebar Section */
+.sidebar {
+  width: 250px;
+  background: white;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+/* Hide sidebar on mobile by default */
+.sidebar.closed {
+  transform: translateX(-100%);
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Page content */
+.page-content {
+  flex: 1;
+  padding: 20px;
+}
+
+/* Header stays fixed and responsive */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #fff;
+  padding: 12px 20px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
