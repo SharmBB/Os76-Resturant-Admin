@@ -37,6 +37,54 @@
   font-size: 16px;
 }
 
+.menu li a {
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
 
+.submenu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* pushes arrow to the right */
+  padding-right: 15px; /* space for arrow */
+}
+
+.menu-item-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.menu-item-right svg {
+  font-size: 14px;
+  color: #666;
+  transition: transform 0.2s ease;
+}
+
+/* Optional rotation animation for arrow */
+.submenu-toggle.open .menu-item-right svg {
+  transform: rotate(90deg);
+}
+
+/* Submenu styles */
+.submenu {
+  list-style: none;
+  padding-left: 35px;
+  margin: 0;
+  background: #f9f9f9;
+}
+
+.submenu li {
+  padding: 8px 0;
+  color: #555;
+}
+
+.submenu li:hover {
+  color: #007bff;
+}
 
 
