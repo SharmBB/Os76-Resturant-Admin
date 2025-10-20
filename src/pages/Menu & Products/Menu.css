@@ -1,0 +1,141 @@
+.menu-container {
+  font-family: Arial, sans-serif;
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  position: relative;
+}
+
+.info-bubble {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bubble-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e3f2fd;
+  border-radius: 50%;
+  padding: 8px;
+  font-size: 12px;
+  color: #1976d2;
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
+}
+
+.how-it-works {
+  color: #1976d2;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.title-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.menu-title {
+  margin: 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.add-button {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.toggle-section {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.toggle-label {
+  margin-right: 8px;
+  font-size: 16px;
+  color: #666;
+}
+
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 24px;
+  background-color: #4caf50;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.toggle-switch.off {
+  background-color: #ccc;
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 2px;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: left 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.toggle-switch.on .toggle-knob {
+  left: 2px;
+}
+
+.toggle-switch.off .toggle-knob {
+  left: 28px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  margin-bottom: 20px;
+  box-sizing: border-box;
+}
+
+.menu-item-card {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  margin-bottom: 16px;
+}
+
+.item-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.item-details {
+  flex: 1;
+}
+
+.item-name {
+  margin: 0 0 4px 0;
+  font-size: 18px;
+}
+
+.item-price {
+  margin: 0;
+  color: #666;
+  font-size: 16px;
+}
