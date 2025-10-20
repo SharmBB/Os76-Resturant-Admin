@@ -98,12 +98,12 @@
   justify-content: space-between;
 }
 
-.order-header {
+.order-header1 {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-  margin-top: auto;
+  margin-top: 20px;
 }
 
 .order-id {
