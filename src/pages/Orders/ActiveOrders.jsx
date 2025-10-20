@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import DashboardLayout from "../../layouts/DashboardLayout";
-//import "./ActiveOrders.css";
 import "./ActiveOrders.css";
 import { FaClock } from "react-icons/fa";
 
@@ -54,7 +53,7 @@ function ActiveOrders(){
                 {/* Orders List */}
                 <div className="orders-container">
                     <div className="order-card">
-                        <div className="order-header">
+                        <div className="order-header1">
                         <span className="order-id">Order Id: 00000003</span>
                         <div className="badges">
                             <span className="badge unpaid">Unpaid</span>
