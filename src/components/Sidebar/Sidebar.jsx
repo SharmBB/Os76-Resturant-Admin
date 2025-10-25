@@ -10,6 +10,7 @@ const Sidebar = () => {
 
     const [openMenu, setOpenMenu] = useState({
     orders: false,
+    menuproducts: false,
     reservations: false,
     management: false,
   });
@@ -65,7 +66,62 @@ const Sidebar = () => {
 
             <li><FaStore /> Website Builder</li>
             <li><FaCog /> Website & Store Management</li>
-            <li><FaTags /> Menu & Products</li>
+            
+            {/* Menu & Products */}
+
+            <li onClick={() => toggleMenu("menuproducts")} className="submenu-toggle">
+                <div className="menu-item-left">
+                    <FaTags /> <span>Menu & Products</span>
+                </div>
+                <div className="menu-item-right">
+                    {openMenu.menuproducts ? <FaChevronDown /> : <FaChevronRight />}
+                </div>
+            </li>
+            {openMenu.menuproducts && (
+            <ul className="submenu">
+                <li>
+                <Link
+                    to="/menu"
+                    className={location.pathname === "/menu" ? "active" : ""}
+                >
+                    Menu
+                </Link>
+                </li>
+                <li>
+                <Link
+                    to="/pathname"
+                    className={location.pathname === "/pathname" ? "active" : ""}
+                >
+                    Categories
+                </Link>
+                </li>
+                <li>
+                <Link
+                    to="/pathname"
+                    className={location.pathname === "/pathname" ? "active" : ""}
+                >
+                    Bulk Import
+                </Link>
+                </li>
+                <li>
+                <Link
+                    to="/pathname"
+                    className={location.pathname === "/pathname" ? "active" : ""}
+                >
+                    Menu Management
+                </Link>
+                </li>
+                <li>
+                <Link
+                    to="/pathname"
+                    className={location.pathname === "/pathname" ? "active" : ""}
+                >
+                    Inventory Management
+                </Link>
+                </li>
+            </ul>
+            )}
+
             <li><FaClipboardList /> Order & Checkout Settings</li>
             <li><FaUsers /> Table & Dine-in</li>
             <li><FaUsers /> Customer Management (CRM)</li>
