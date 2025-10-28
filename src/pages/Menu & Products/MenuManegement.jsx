@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './MenuManegement.css';
+import DashboardLayout from '../../layouts/DashboardLayout';
 
 function AddSubcategoryModal({ isOpen, onClose }) {
   if (!isOpen) return null;
@@ -99,27 +100,29 @@ function MenuManagement() {
   const closeSubcategoryModal = () => setShowSubcategoryModal(false);
 
   return (
-    <div className="menu-management">
-      <div className="header">
-        <h2 className="title">Categories</h2>
-        <div className="header-actions">
-          <span className="info-bubble">!</span>
-          <span className="how-it-works">How it works!</span>
+    <DashboardLayout>
+      <div className="menu-management">
+        <div className="header">
+          <h2 className="title">Categories</h2>
+          <div className="header-actions">
+            <span className="info-bubble">!</span>
+            <span className="how-it-works">How it works!</span>
+          </div>
         </div>
+        <p className="description">
+          Drag &amp; Drop the category to change its order
+        </p>
+        <div className="buttons-container">
+          <button className="btn" onClick={openCategoryModal}>+ Category</button>
+          <button className="btn" onClick={openSubcategoryModal}>+ Subcategory</button>
+        </div>
+        <div className="category-item">
+          <span className="category-name">home made</span>
+        </div>
+        <AddCategoryModal isOpen={showCategoryModal} onClose={closeCategoryModal} />
+        <AddSubcategoryModal isOpen={showSubcategoryModal} onClose={closeSubcategoryModal} />
       </div>
-      <p className="description">
-        Drag &amp; Drop the category to change its order
-      </p>
-      <div className="buttons-container">
-        <button className="btn" onClick={openCategoryModal}>+ Category</button>
-        <button className="btn" onClick={openSubcategoryModal}>+ Subcategory</button>
-      </div>
-      <div className="category-item">
-        <span className="category-name">home made</span>
-      </div>
-      <AddCategoryModal isOpen={showCategoryModal} onClose={closeCategoryModal} />
-      <AddSubcategoryModal isOpen={showSubcategoryModal} onClose={closeSubcategoryModal} />
-    </div>
+    </DashboardLayout>
   );
 }
 

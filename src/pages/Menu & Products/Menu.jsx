@@ -1,21 +1,25 @@
 import React from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import './Menu.css';
+import { useNavigate } from 'react-router-dom';
 
 function Menu() {
+
+  const navigate = useNavigate();
+
   return (
     <DashboardLayout>
       <div className="menu-container">
         {/* Info bubble */}
-        <div className="info-bubble">
-          <span className="bubble-number">1</span>
+        <div className="info-bubble1">
+          <span className="bubble-number">i</span>
           <a href="#" className="how-it-works">How it works!</a>
         </div>
 
         {/* Title and Add Button */}
         <div className="title-section">
           <h1 className="menu-title">Standard Menu</h1>
-          <button className="add-button">+ Add Menu Item</button>
+          <button className="add-button" onClick={() => navigate("/menu-item-added")}>+ Add Menu Item</button>
         </div>
 
         {/* Home Made Toggle */}

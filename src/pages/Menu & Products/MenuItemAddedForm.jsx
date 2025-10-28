@@ -1,18 +1,81 @@
 // MenuItemAddedForm.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './MenuItemAddedForm.css'; 
 import DashboardLayout from '../../layouts/DashboardLayout';
 
 function MenuItemAddedForm() {
   const [formData, setFormData] = useState({
     name: '',
-    category: '',
-    subcategory: '',
-    type: 'Veg', 
-    productCode: '',
+    category_id: '',
+    subcategory_id: '',
+    price:'',
+    compare_at_price: '',
+    type: '', 
+    product_code: '',
     description: '',
+    track_inventory_enabled: false,
   });
 
+  //loaded categories
+  const [categories, setCategories] = useState([]); 
+  const [loadingCats, setLoadingCats] = useState(false);
+  const [catsError, setCatsError] = useState(null);
+
+  //loaded subcategiries
+  const [subcategories, setSubCategories] = useState([]); 
+  const [loadingsubCats, setLoadingsubCats] = useState(false);
+  const [subcatsError, setsubCatsError] = useState(null);
+
+  //load categories on mount
+  useEffect(() => {
+    const loadCategories = async () => {
+      setLoadingCats(true);
+      setCatsError(null);
+
+      try{
+        const res = await fetch("http://127.0.0.1:8000/api/categories");
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        // your controller returns { status:200, data: [...] }
+        const data = Array.isArray(json) ? json : (json.data ?? [])
+        setCategories(data);
+      }
+      catch(err){
+        setCatsError(err.message || "Failed to load categories");
+      }
+      finally{
+        setLoadingCats(false);
+      }
+    };
+    loadCategories();
+  },[]);
+
+  //load subcategories on mount
+  useEffect(() => {
+    const loadsubCategories = async () => {
+      setLoadingsubCats(true);
+      setsubCatsError(null);
+
+      try{
+        const res = await fetch("http://127.0.0.1:8000/api/subcategories");
+        if(!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        // your controller returns { status:200, data: [...] }
+        const data = Array.isArray(json) ? json : (json.data ?? [])
+        setSubCategories(data);
+      }
+      catch(err){
+        setsubCatsError(err.message || "Failed to load subCategories");
+      }
+      finally{
+        setLoadingsubCats(false);
+      }
+    };
+    loadsubCategories();
+  },[]);
+
+
+  //variants part
   const [variants, setVariants] = useState([
     {
       id: Date.now(),
@@ -25,16 +88,48 @@ function MenuItemAddedForm() {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
+
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'radio' ? value : (type === 'checkbox' ? checked : value)
+      [name]: 
+      type === 'radio' ? value : (type === 'checkbox' ? checked : value)
     }));
+    
   };
 
-  const handleSubmit = (e) => {
+  //Sumbit Form
+  const handleSubmit = async  (e) => {
     e.preventDefault();
-    console.log('Form submitted:', { ...formData, variants });
-    // Handle form submission here
+
+    try{
+      const res = await fetch("http://127.0.0.1:8000/api/menu-items",{
+         method: 'POST',
+         headers: {
+         'Content-Type': 'application/json'
+      },
+        body: JSON.stringify(formData)
+    });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Failed to save menu item');
+
+      alert('Menu item added successfully!');
+      setFormData({
+        name: '',
+        category_id: '',
+        subcategory_id: '',
+        price: '',
+        compare_at_price: '',
+        type: '',
+        product_code: '',
+        description: '',
+        track_inventory_enabled: false,
+      });
+    } 
+    catch(err){
+      console.error(err);
+      alert(err.message);
+    }
   };
 
   const addVariant = () => {
@@ -79,92 +174,65 @@ function MenuItemAddedForm() {
               <div className="form-body">
                 <div className="form-group">
                   <label>Name *</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    placeholder="Product Name"
-                    required
-                  />
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} required/>
                 </div>
 
                 <div className="form-group">
                   <label>Category *</label>
-                  <select
-                    name="category"
-                    value={formData.category}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select item Category</option>
-                    <option value="appetizers">Appetizers</option>
-                    <option value="mains">Mains</option>
-                    <option value="desserts">Desserts</option>
-                    {/* Add more options as needed */}
+                    {loadingCats ? (<div>Loading categories</div>) : catsError ? (
+                      <div style={{color:"red"}} >Error: {catsError}</div>
+                    ) : (
+                      <select name='category_id' value={formData.category_id} onChange={handleChange} required>
+                        <option value="">Select item Category</option>
+                        {categories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </option>
+                    ))}
                   </select>
+                    )}
                 </div>
 
                 <div className="form-group">
-                  <label>Subcategory</label>
-                  <select
-                    name="subcategory"
-                    value={formData.subcategory}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select item Subcategory</option>
-                    <option value="sub1">Subcategory 1</option>
-                    <option value="sub2">Subcategory 2</option>
-                    {/* Add more options as needed */}
+                  <label>Sub Category *</label>
+                    {loadingsubCats ? (<div>Loading subcategories</div>) : subcatsError ? (
+                      <div style={{color:"red"}} >Error: {subcatsError}</div>
+                    ) : (
+                      <select name='subcategory_id' value={formData.subcategory_id} onChange={handleChange} required>
+                        <option value="">Select SubCategory</option>
+                        {subcategories.map((cat) => (
+                        <option key={cat.id} value={cat.id}>
+                          {cat.name}
+                        </option>
+                    ))}
                   </select>
+                    )}
+                </div>
+
+                <div className="form-group">
+                  <label>Price *</label>
+                  <input type="number" name="price" value={formData.price} onChange={handleChange} required/>
+                </div>
+
+                <div className='form-group'>
+                  <lable>Compare-At Price (optional)</lable>
+                  <input type="number" name="compare_at_price" value={formData.compare_at_price} onChange={handleChange} placeholder="Enter Price" required/>
                 </div>
 
                 <div className="form-group">
                   <label>Type</label>
-                  <div className="radio-group">
-                    <label>
-                      <input
-                        type="radio"
-                        name="type"
-                        value="Veg"
-                        checked={formData.type === 'Veg'}
-                        onChange={handleChange}
-                      />
-                      Veg
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="type"
-                        value="Non-veg"
-                        checked={formData.type === 'Non-veg'}
-                        onChange={handleChange}
-                      />
-                      Non-veg
-                    </label>
-                  </div>
+                  <label><input type="radio" name="type" value="Veg" checked={formData.type === 'Veg'} onChange={handleChange}/> Veg</label>
+                  <label><input type="radio" name="type" value="Non_veg" checked={formData.type === 'Non_veg'} onChange={handleChange}/> Non-veg</label>
                 </div>
 
                 <div className="form-group">
-                  <label>Product Code (optional)</label>
-                  <input
-                    type="text"
-                    name="productCode"
-                    value={formData.productCode}
-                    onChange={handleChange}
-                    placeholder="Enter product code"
-                  />
+                  <label>Product Code</label>
+                  <input type="text" name="product_code" value={formData.product_code} onChange={handleChange}/>
                 </div>
 
                 <div className="form-group">
                   <label>Description</label>
-                  <textarea
-                    name="description"
-                    value={formData.description}
-                    onChange={handleChange}
-                    placeholder="Describe Product Details"
-                    rows="4"
-                  />
+                  <textarea name="description" value={formData.description} onChange={handleChange}></textarea>
                 </div>
 
                 <button type="submit" className="save-btn">Save</button>

@@ -89,8 +89,8 @@ const Sidebar = () => {
                 </li>
                 <li>
                 <Link
-                    to="/pathname"
-                    className={location.pathname === "/pathname" ? "active" : ""}
+                    to="/menu-management"
+                    className={location.pathname === "/menu-management" ? "active" : ""}
                 >
                     Categories
                 </Link>
