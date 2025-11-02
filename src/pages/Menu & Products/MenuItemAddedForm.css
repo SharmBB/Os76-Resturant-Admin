@@ -7,6 +7,23 @@
   margin: 0 auto;
 }
 
+.submit-button{
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.my-button{
+  justify-content: center;
+  margin: auto;
+  display: flex;
+  margin-top: 10px;
+}
+
 .shared-header {
   display: flex;
   justify-content: space-between;
@@ -244,4 +261,9 @@
 .upload-image span {
   font-size: 12px;
   color: #666;
+}
+
+.image-preview{
+  justify-content: center;
+  display: flex;
 }
