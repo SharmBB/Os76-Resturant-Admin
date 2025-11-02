@@ -26,6 +26,23 @@ function MenuItemAddedForm() {
   const [loadingsubCats, setLoadingsubCats] = useState(false);
   const [subcatsError, setsubCatsError] = useState(null);
 
+  // variants data - now properly managed per variant in the array
+  const [variants, setVariants] = useState([
+    {
+      id: Date.now(),
+      variantName: '',
+      price: '',
+      comparePrice: '',
+      track: false,
+      image: null
+    }
+  ]);
+
+  const [preview, setPreview] = useState(null);
+
+  // Track the created menu item ID for variants
+  const [createdMenuItemId, setCreatedMenuItemId] = useState(null);
+
   //load categories on mount
   useEffect(() => {
     const loadCategories = async () => {
@@ -74,18 +91,6 @@ function MenuItemAddedForm() {
     loadsubCategories();
   },[]);
 
-
-  //variants part
-  const [variants, setVariants] = useState([
-    {
-      id: Date.now(),
-      variantName: '',
-      price: '',
-      comparePrice: '',
-      track: false
-    }
-  ]);
-
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
@@ -97,7 +102,27 @@ function MenuItemAddedForm() {
     
   };
 
-  //Sumbit Form
+  // Update a specific variant field
+  const updateVariant = (variantId, field, value) => {
+    setVariants(prev => prev.map(v => 
+      v.id === variantId ? { ...v, [field]: value } : v
+    ));
+  };
+
+  // Handle image change per variant
+  const handleImageChange = (variantId, e) => { 
+    const file = e.target.files[0];
+    if (file) {
+      updateVariant(variantId, 'image', file);
+    }
+
+    // Create a temporary URL for preview
+    const previewURL = URL.createObjectURL(file);
+    setPreview(previewURL);
+
+  };
+
+  //Sumbit Form for main menu item
   const handleSubmit = async  (e) => {
     e.preventDefault();
 
@@ -113,7 +138,10 @@ function MenuItemAddedForm() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.message || 'Failed to save menu item');
 
-      alert('Menu item added successfully!');
+     
+      setCreatedMenuItemId(data.data?.id || data.id); 
+
+      alert('Menu item added successfully! Now add variants.');
       setFormData({
         name: '',
         category_id: '',
@@ -138,22 +166,56 @@ function MenuItemAddedForm() {
       variantName: '',
       price: '',
       comparePrice: '',
-      track: false
+      track: false,
+      image: null
     };
     setVariants(prev => [...prev, newVariant]);
-  };
-
-  const updateVariant = (id, field, value) => {
-    setVariants(prev => prev.map(v => v.id === id ? { ...v, [field]: typeof value === 'boolean' ? value : value } : v));
   };
 
   const removeVariant = (id) => {
     setVariants(prev => prev.filter(v => v.id !== id));
   };
 
-  const handleHowItWorks = () => {
-    // Handle "How it works" modal or info
-    console.log('How it works clicked');
+  // Submit a single variant
+  const submitVariant = async (variant) => {
+    if (!createdMenuItemId) {
+      alert('Please create the main menu item first.');
+      return;
+    }
+
+    const formDataVariant = new FormData();
+    formDataVariant.append('menu_item_id', createdMenuItemId);
+    formDataVariant.append('variant_name', variant.variantName);
+    formDataVariant.append('price', Number(variant.price));
+    formDataVariant.append('compare_at_price', variant.comparePrice ? Number(variant.comparePrice) : null);
+    formDataVariant.append('track_inventory_enabled', variant.track ? 1 : 0);
+    if (variant.image) {
+      formDataVariant.append('variant_img', variant.image);
+    }
+
+    try {
+      const variantRes = await fetch("http://127.0.0.1:8000/api/variants", {
+        method: 'POST',
+        body: formDataVariant 
+      });
+
+      const data = await variantRes.json(); 
+      console.log(data);
+
+      if (!variantRes.ok) throw new Error(data.message || 'Failed to save variant');
+
+      alert('Variant added successfully!');
+      
+      // Reset this variant
+      updateVariant(variant.id, 'variantName', '');
+      updateVariant(variant.id, 'price', '');
+      updateVariant(variant.id, 'comparePrice', '');
+      updateVariant(variant.id, 'track', false);
+      updateVariant(variant.id, 'image', null);
+    } catch (error) {
+      console.error("Error is - ", error);
+      alert(error.message);
+    }
   };
 
   return (
@@ -216,7 +278,7 @@ function MenuItemAddedForm() {
 
                 <div className='form-group'>
                   <lable>Compare-At Price (optional)</lable>
-                  <input type="number" name="compare_at_price" value={formData.compare_at_price} onChange={handleChange} placeholder="Enter Price" required/>
+                  <input type="number" name="compare_at_price" value={formData.compare_at_price} onChange={handleChange} placeholder="Enter Price" />
                 </div>
 
                 <div className="form-group">
@@ -235,7 +297,7 @@ function MenuItemAddedForm() {
                   <textarea name="description" value={formData.description} onChange={handleChange}></textarea>
                 </div>
 
-                <button type="submit" className="save-btn">Save</button>
+                <button type="submit" className="save-btn">Save Menu Item</button>
               </div>
             </form>
           </div>
@@ -292,6 +354,35 @@ function MenuItemAddedForm() {
                     </label>
                   </div>
 
+                  <div className="upload-image">
+                    <label htmlFor={`image-upload-${variant.id}`}>📎</label>
+                    <input
+                      type="file"
+                      id={`image-upload-${variant.id}`}
+                      accept="image/*"
+                      style={{ display: 'none' }}
+                      onChange={(e) => handleImageChange(variant.id, e)}
+                    />
+                    <span>Upload item image</span>
+                  </div>
+
+                  {preview && (
+                      <div className="image-preview">
+                                <img
+                                   src={preview}
+                                    alt="Variant Preview"
+                                    style={{ width: '120px', height: '120px', objectFit: 'cover', marginTop: '10px', borderRadius: '10px' }}
+                                />
+                     </div>
+                  )}
+
+
+                  <div className='my-button'>
+                   <button type='button' className='submit-button' onClick={() => submitVariant(variant)}>
+                     Submit Variant
+                   </button>
+                  </div>
+
                   {variants.length > 1 && (
                     <button type="button" className="remove-variant-btn" onClick={() => removeVariant(variant.id)}>
                       Remove
@@ -304,17 +395,6 @@ function MenuItemAddedForm() {
                 + Add more
               </button>
 
-              <div className="upload-image">
-                <label htmlFor="image-upload">📎</label>
-                <input
-                  type="file"
-                  id="image-upload"
-                  accept="image/*"
-                  style={{ display: 'none' }}
-                  onChange={(e) => console.log('Image uploaded:', e.target.files[0])}
-                />
-                <span>Upload item image</span>
-              </div>
             </div>
           </div>
         </div>
