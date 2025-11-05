@@ -1,9 +1,16 @@
-// MenuItemAddedForm.js
 import React, { useEffect, useState } from 'react';
 import './MenuItemAddedForm.css'; 
 import DashboardLayout from '../../layouts/DashboardLayout';
+import { useLocation, useNavigate  } from "react-router-dom";
 
 function MenuItemAddedForm() {
+
+
+  const navigate = useNavigate();
+
+  const location = useLocation(); //get data from same page
+  const itemData = location.state?.item; // get item data from state
+
   const [formData, setFormData] = useState({
     name: '',
     category_id: '',
@@ -15,6 +22,23 @@ function MenuItemAddedForm() {
     description: '',
     track_inventory_enabled: false,
   });
+
+  //load edditing data
+  useEffect(() => {
+    if (itemData) {
+      setFormData({
+        name: itemData.name || '',
+        category_id: itemData.category_id || '',
+        subcategory_id: itemData.subcategory_id || '',
+        price: itemData.price || '',
+        compare_at_price: itemData.compare_at_price || '',
+        type: itemData.type || '',
+        product_code: itemData.product_code || '',
+        description: itemData.description || '',
+        track_inventory_enabled: itemData.track_inventory_enabled || false,
+      });
+    }
+  }, [itemData]);
 
   //loaded categories
   const [categories, setCategories] = useState([]); 
@@ -123,25 +147,34 @@ function MenuItemAddedForm() {
   };
 
   //Sumbit Form for main menu item
-  const handleSubmit = async  (e) => {
-    e.preventDefault();
+  
+  const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try{
-      const res = await fetch("http://127.0.0.1:8000/api/menu-items",{
-         method: 'POST',
-         headers: {
-         'Content-Type': 'application/json'
+  const isEdit = !!itemData; // true if editing
+  const url = isEdit
+    ? `http://127.0.0.1:8000/api/menu-items/${itemData.id}`
+    : "http://127.0.0.1:8000/api/menu-items";
+  const method = isEdit ? "PUT" : "POST";
+
+  try {
+    const res = await fetch(url, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json"
       },
-        body: JSON.stringify(formData)
+      body: JSON.stringify(formData)
     });
 
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.message || 'Failed to save menu item');
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.message || 'Failed to save menu item');
 
-     
-      setCreatedMenuItemId(data.data?.id || data.id); 
+    setCreatedMenuItemId(data.data?.id || data.id || itemData?.id);
 
-      alert('Menu item added successfully! Now add variants.');
+    alert(isEdit ? 'Menu item updated successfully!' : 'Menu item added successfully! Now add variants.');
+
+    // Reset form only if creating new item
+    if (!isEdit) {
       setFormData({
         name: '',
         category_id: '',
@@ -153,12 +186,18 @@ function MenuItemAddedForm() {
         description: '',
         track_inventory_enabled: false,
       });
-    } 
-    catch(err){
-      console.error(err);
-      alert(err.message);
     }
-  };
+
+    // Redirect to menu dashboard with refresh
+    navigate("/menu", { state: { refresh: true } });
+
+  } catch (err) {
+    console.error(err);
+    alert(err.message);
+  }
+};
+
+
 
   const addVariant = () => {
     const newVariant = {

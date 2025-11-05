@@ -1,11 +1,70 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import './Menu.css';
 import { useNavigate } from 'react-router-dom';
 
 function Menu() {
 
+  const [menuItems, setMenuItems] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+ 
+  //Fetch menu items from backend
+  useEffect(() => {
+    const fetchMenuItems = async () => {
+      try{
+        const res = await fetch("http://127.0.0.1:8000/api/menu-items");
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const json = await res.json();
+        const data = Array.isArray(json.data) ? json.data : [];
+        setMenuItems(data);
+      }
+      catch(err){
+        setError(err.message);
+      }
+      finally{
+        setLoading(false);
+      }
+    };
+    fetchMenuItems();
+  }, []);
+
+  // Toggle visibility
+  const handleToggle = async (itemId, currentValue) => {
+    const newValue = !currentValue;
+
+    // Update locally for smooth UI
+    setMenuItems((prev) =>
+      prev.map((item) =>
+        item.id === itemId ? { ...item, is_visible: newValue } : item
+      )
+    );
+
+    // Optional: Update backend
+    try {
+      await fetch(`http://127.0.0.1:8000/api/menu-items/${itemId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_visible: newValue }),
+      });
+    } catch (err) {
+      console.error("Failed to update visibility:", err);
+    }
+  };
+
+  //search bar
+  const [searchTerm, setSearchTerm] = useState("");
+
+  // Filter menu items based on search input
+  const filteredItems = menuItems.filter((item) =>
+  item.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  
+
   const navigate = useNavigate();
+
+  if (loading) return <div>Loading menu items...</div>;
+  if (error) return <div style={{ color: "red" }}>Error: {error}</div>;
 
   return (
     <DashboardLayout>
@@ -31,24 +90,55 @@ function Menu() {
         </div>
 
         {/* Search Bar */}
-        <input 
-          type="text" 
-          placeholder="Search Product Name, Description or Price" 
-          className="search-input" 
+        <input
+        type="text"
+        placeholder="Search Product Name, Description or Price"
+        className="search-input"
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
         />
 
         {/* Menu Item Card */}
-        <div className="menu-item-card">
-          <div className="item-content">
-            <div className="item-details">
-              <h3 className="item-name">Pizza ★ 1</h3>
-              <p className="item-price">Rs 200.00</p>
-            </div>
-            <div className="toggle-switch off">
-              <div className="toggle-knob"></div>
-            </div>
-          </div>
+        {/* Loading / Error / Items */}
+        {loading ? (
+          <p>Loading menu items...</p>
+        ) : error ? (
+          <p style={{ color: "red" }}>Error: {error}</p>
+        ) : filteredItems.length === 0 ? (
+          <p>No items found.</p>
+        ) : (
+          filteredItems.map((item) => (
+            <div
+      className="menu-item-card"
+      key={item.id}
+      onClick={() => navigate("/menu-item-added", { state: { item } })} //Pass data
+      style={{ cursor: "pointer" }}
+    >
+      <div className="item-content">
+        <div className="item-details">
+          <h3 className="item-name">{item.name}</h3>
+          <p className="item-description">{item.description || "No description"}</p>
+          <p className="item-price">Rs {item.price}</p>
         </div>
+
+        {/* Visibility Toggle */}
+        <div
+          className={`toggle-switch ${item.is_visible ? "on" : "off"}`}
+          onClick={(e) => {
+            e.stopPropagation(); // 🛑 Prevent navigation when toggle is clicked
+            handleToggle(item.id, item.is_visible);
+          }}
+        >
+          <div className="toggle-knob"></div>
+        </div>
+      </div>
+    </div>
+          ))
+        )}
+
+
+
+
       </div>
     </DashboardLayout>
   );
