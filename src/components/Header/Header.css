@@ -10,12 +10,6 @@
   z-index: 10;
 }
 
-.header-left {
-  display: flex;
-  align-items: center;
-  gap: 400px;
-}
-
 .logo {
   font-size: 24px;
   font-weight: 700;
@@ -44,7 +38,10 @@
 
 .header-right {
   display: flex;
+  justify-content: center;
+  flex-direction: row;
   align-items: center;
+  margin: 0 auto;
   gap: 20px;
 }
 

@@ -15,11 +15,6 @@ const Header = ({ toggleSidebar }) => {
       <div className="header-left">
         
         <div className="logo">foodiv</div>
-        
-        <div className="trial-banner">
-            Trial Period of the <strong>PLUS PLAN</strong> will expire in <strong>4 day(s)</strong>
-          <button className="choose-btn">Choose Plan</button>
-        </div>
       </div>
 
       <div className="header-right">
