@@ -11,23 +11,24 @@ function Menu() {
  
   //Fetch menu items from backend
   useEffect(() => {
-    const fetchMenuItems = async () => {
-      try{
-        const res = await fetch("http://127.0.0.1:8000/api/menu-items");
-        if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        const json = await res.json();
-        const data = Array.isArray(json.data) ? json.data : [];
-        setMenuItems(data);
-      }
-      catch(err){
-        setError(err.message);
-      }
-      finally{
-        setLoading(false);
-      }
-    };
-    fetchMenuItems();
-  }, []);
+  const fetchMenuItems = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:8000/api/menu-items");
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      const json = await res.json();
+      const data = Array.isArray(json.data?.menu_item) ? json.data.menu_item : [];
+
+      setMenuItems(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  fetchMenuItems();
+}, []);
+
 
   // Toggle visibility
   const handleToggle = async (itemId, currentValue) => {
@@ -125,7 +126,7 @@ function Menu() {
         <div
           className={`toggle-switch ${item.is_visible ? "on" : "off"}`}
           onClick={(e) => {
-            e.stopPropagation(); // 🛑 Prevent navigation when toggle is clicked
+            e.stopPropagation(); //Prevent navigation when toggle is clicked
             handleToggle(item.id, item.is_visible);
           }}
         >
