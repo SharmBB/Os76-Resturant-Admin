@@ -13,6 +13,8 @@ function MenuItemAddedForm() {
 
   const [formData, setFormData] = useState({
     name: '',
+    is_visible: 1,
+    menuItem_img: '',
     category_id: '',
     subcategory_id: '',
     price:'',
@@ -21,6 +23,7 @@ function MenuItemAddedForm() {
     product_code: '',
     description: '',
     track_inventory_enabled: false,
+    menu_list_id: '',
   });
 
   //load edditing data
@@ -28,6 +31,8 @@ function MenuItemAddedForm() {
     if (itemData) {
       setFormData({
         name: itemData.name || '',
+        is_visible: itemData.is_visible || '',
+        menuItem_img: itemData.menuItem_img || '',
         category_id: itemData.category_id || '',
         subcategory_id: itemData.subcategory_id || '',
         price: itemData.price || '',
@@ -36,6 +41,7 @@ function MenuItemAddedForm() {
         product_code: itemData.product_code || '',
         description: itemData.description || '',
         track_inventory_enabled: itemData.track_inventory_enabled || false,
+        menu_list_id: itemData.menu_list_id || '',
       });
     }
   }, [itemData]);
@@ -147,55 +153,82 @@ function MenuItemAddedForm() {
   };
 
   //Sumbit Form for main menu item
-  
-  const handleSubmit = async (e) => {
-  e.preventDefault();
+    const handleSubmit = async (e) => {
+      e.preventDefault();
 
-  const isEdit = !!itemData; // true if editing
-  const url = isEdit
-    ? `http://127.0.0.1:8000/api/menu-items/${itemData.id}`
-    : "http://127.0.0.1:8000/api/menu-items";
-  const method = isEdit ? "PUT" : "POST";
+      const isEdit = !!itemData; // true if editing
+      const url = isEdit
+        ? `http://127.0.0.1:8000/api/menu-items/${itemData.id}`
+        : "http://127.0.0.1:8000/api/menu-items";
 
-  try {
-    const res = await fetch(url, {
-      method: method,
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(formData)
-    });
+      try {
+        //  Create FormData (instead of JSON)
+        const formDataToSend = new FormData();
+        formDataToSend.append("name", formData.name);
+        formDataToSend.append("is_visible", formData.is_visible ? 1 : 0);
+        formDataToSend.append("category_id", formData.category_id);
+        formDataToSend.append("subcategory_id", formData.subcategory_id || "");
+        formDataToSend.append("price", formData.price);
+        formDataToSend.append("compare_at_price", formData.compare_at_price || "");
+        formDataToSend.append("type", formData.type);
+        formDataToSend.append("product_code", formData.product_code || "");
+        formDataToSend.append("description", formData.description || "");
+        formDataToSend.append("track_inventory_enabled",formData.track_inventory_enabled ? 1 : 0
+        );
+        formDataToSend.append("outlet_id", 1); // Replace 1 with actual outlet_id or selected value
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.message || 'Failed to save menu item');
+        // If the user selected an image file for menuItem_img
+        if (formData.menuItem_img instanceof File) {
+          formDataToSend.append("menuItem_img", formData.menuItem_img);
+        }
+        if (isEdit) {
+          formDataToSend.append("_method", "PUT");
+        }
+        const res = await fetch(url, {
+          method: "POST",
+          body: formDataToSend,
+        });
 
-    setCreatedMenuItemId(data.data?.id || data.id || itemData?.id);
+        const data = await res.json();
 
-    alert(isEdit ? 'Menu item updated successfully!' : 'Menu item added successfully! Now add variants.');
+        if (!res.ok) {
+          throw new Error(data.message || "Failed to save menu item");
+        }
 
-    // Reset form only if creating new item
-    if (!isEdit) {
-      setFormData({
-        name: '',
-        category_id: '',
-        subcategory_id: '',
-        price: '',
-        compare_at_price: '',
-        type: '',
-        product_code: '',
-        description: '',
-        track_inventory_enabled: false,
-      });
-    }
+        setCreatedMenuItemId(data.data?.id || data.id || itemData?.id);
 
-    // Redirect to menu dashboard with refresh
-    navigate("/menu", { state: { refresh: true } });
+        alert(
+          isEdit
+            ? "Menu item updated successfully!"
+            : "Menu item added successfully! Now add variants."
+        );
 
-  } catch (err) {
-    console.error(err);
-    alert(err.message);
-  }
-};
+        // Reset form after creating
+        if (!isEdit) {
+          setFormData({
+            name: "",
+            is_visible: "",
+            menuItem_img: "",
+            category_id: "",
+            subcategory_id: "",
+            price: "",
+            compare_at_price: "",
+            type: "",
+            product_code: "",
+            description: "",
+            track_inventory_enabled: false,
+            menu_list_id: "",
+          });
+        }
+
+        // Redirect
+        navigate("/menu", { state: { refresh: true } });
+      } catch (err) {
+        console.error("Submit error:", err);
+        alert(err.message);
+      }
+    };
+
 
 
 
