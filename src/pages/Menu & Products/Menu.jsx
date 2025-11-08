@@ -1,38 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import DashboardLayout from '../../layouts/DashboardLayout';
 import './Menu.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams  } from 'react-router-dom';
 
 function Menu() {
+
+  const { menuListId } = useParams();
 
   const [menuItems, setMenuItems] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [menuName, setMenuName] = useState("");
  
   //Fetch menu items from backend
   useEffect(() => {
   const fetchMenuItems = async () => {
     try {
-      const res = await fetch("http://127.0.0.1:8000/api/menu-items");
+      const res = await fetch(`http://127.0.0.1:8000/api/menuLists/${menuListId}`);
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       const json = await res.json();
-      const data = Array.isArray(json.data?.menu_item) ? json.data.menu_item : [];
-
-      setMenuItems(data);
+      const menuData = json.data;
+      setMenuName(menuData.name); // display menu name
+      setMenuItems(menuData.menu_items ?? []);
     } catch (err) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-
   fetchMenuItems();
-}, []);
+}, [menuListId]);
 
 
   // Toggle visibility
   const handleToggle = async (itemId, currentValue) => {
-    const newValue = !currentValue;
+  const newValue = !currentValue;
 
     // Update locally for smooth UI
     setMenuItems((prev) =>
@@ -78,8 +81,8 @@ function Menu() {
 
         {/* Title and Add Button */}
         <div className="title-section">
-          <h1 className="menu-title">Standard Menu</h1>
-          <button className="add-button" onClick={() => navigate("/menu-item-added")}>+ Add Menu Item</button>
+          <h1 className="menu-title">{menuName}</h1>
+          <button className="add-button" onClick={() => navigate(`/menu/${menuListId}/add-item`)}>+ Add Menu Item</button>
         </div>
 
         {/* Home Made Toggle */}
@@ -109,12 +112,8 @@ function Menu() {
           <p>No items found.</p>
         ) : (
           filteredItems.map((item) => (
-            <div
-      className="menu-item-card"
-      key={item.id}
-      onClick={() => navigate("/menu-item-added", { state: { item } })} //Pass data
-      style={{ cursor: "pointer" }}
-    >
+            <div className="menu-item-card" key={item.id} onClick={() => navigate(`/menu/${menuListId}/edit/${item.id}`, { state: { item } })} //Pass data
+            style={{ cursor: "pointer" }}>
       <div className="item-content">
         <div className="item-details">
           <h3 className="item-name">{item.name}</h3>
@@ -136,9 +135,6 @@ function Menu() {
     </div>
           ))
         )}
-
-
-
 
       </div>
     </DashboardLayout>

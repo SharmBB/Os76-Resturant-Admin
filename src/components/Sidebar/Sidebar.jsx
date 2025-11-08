@@ -81,8 +81,8 @@ const Sidebar = () => {
             <ul className="submenu">
                 <li>
                 <Link
-                    to="/menu"
-                    className={location.pathname === "/menu" ? "active" : ""}
+                    to="/menu/1"
+                    className={location.pathname.startsWith("/menu") ? "active" : ""}
                 >
                     Menu
                 </Link>
@@ -105,8 +105,8 @@ const Sidebar = () => {
                 </li>
                 <li>
                 <Link
-                    to="/pathname"
-                    className={location.pathname === "/pathname" ? "active" : ""}
+                    to="/MenuOtherManagement"
+                    className={location.pathname === "/MenuOtherManagement" ? "active" : ""}
                 >
                     Menu Management
                 </Link>

@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import './MenuItemAddedForm.css'; 
 import DashboardLayout from '../../layouts/DashboardLayout';
-import { useLocation, useNavigate  } from "react-router-dom";
+import { useLocation, useNavigate, useParams   } from "react-router-dom";
 
 function MenuItemAddedForm() {
 
 
   const navigate = useNavigate();
+
+   const { menuListId, itemId  } = useParams(); // get menulistid from URL
 
   const location = useLocation(); //get data from same page
   const itemData = location.state?.item; // get item data from state
@@ -23,8 +25,39 @@ function MenuItemAddedForm() {
     product_code: '',
     description: '',
     track_inventory_enabled: false,
-    menu_list_id: '',
   });
+
+  useEffect(() => {
+    const loadItemData = async () => {
+      try {
+        if (!itemData && itemId) {
+          const res = await fetch(`http://127.0.0.1:8000/api/menu-items/${itemId}`);
+          if (!res.ok) throw new Error("Failed to fetch item data");
+          const data = await res.json();
+
+          setFormData({
+            name: data.name || "",
+            is_visible: data.is_visible || 0,
+            menuItem_img: data.menuItem_img || "",
+            category_id: data.category_id || "",
+            subcategory_id: data.subcategory_id || "",
+            price: data.price || "",
+            compare_at_price: data.compare_at_price || "",
+            type: data.type || "",
+            product_code: data.product_code || "",
+            description: data.description || "",
+            track_inventory_enabled: data.track_inventory_enabled || false,
+          });
+        }
+      } catch (err) {
+        console.error("Error loading item:", err);
+      }
+    };
+
+    loadItemData();
+  }, [itemData, itemId]);
+
+
 
   //load edditing data
   useEffect(() => {
@@ -41,7 +74,6 @@ function MenuItemAddedForm() {
         product_code: itemData.product_code || '',
         description: itemData.description || '',
         track_inventory_enabled: itemData.track_inventory_enabled || false,
-        menu_list_id: itemData.menu_list_id || '',
       });
     }
   }, [itemData]);
@@ -83,7 +115,6 @@ function MenuItemAddedForm() {
         const res = await fetch("http://127.0.0.1:8000/api/categories");
         if(!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        // your controller returns { status:200, data: [...] }
         const data = Array.isArray(json) ? json : (json.data ?? [])
         setCategories(data);
       }
@@ -107,7 +138,6 @@ function MenuItemAddedForm() {
         const res = await fetch("http://127.0.0.1:8000/api/subcategories");
         if(!res.ok) throw new Error(`HTTP ${res.status}`);
         const json = await res.json();
-        // your controller returns { status:200, data: [...] }
         const data = Array.isArray(json) ? json : (json.data ?? [])
         setSubCategories(data);
       }
@@ -159,7 +189,7 @@ function MenuItemAddedForm() {
       const isEdit = !!itemData; // true if editing
       const url = isEdit
         ? `http://127.0.0.1:8000/api/menu-items/${itemData.id}`
-        : "http://127.0.0.1:8000/api/menu-items";
+        : "http://127.0.0.1:8000/api/menu-items/";
 
       try {
         //  Create FormData (instead of JSON)
@@ -173,8 +203,8 @@ function MenuItemAddedForm() {
         formDataToSend.append("type", formData.type);
         formDataToSend.append("product_code", formData.product_code || "");
         formDataToSend.append("description", formData.description || "");
-        formDataToSend.append("track_inventory_enabled",formData.track_inventory_enabled ? 1 : 0
-        );
+        formDataToSend.append("track_inventory_enabled",formData.track_inventory_enabled ? 1 : 0);
+        formDataToSend.append("menu_list_id", Number(menuListId));
         formDataToSend.append("outlet_id", 1); // Replace 1 with actual outlet_id or selected value
 
         // If the user selected an image file for menuItem_img
@@ -217,20 +247,16 @@ function MenuItemAddedForm() {
             product_code: "",
             description: "",
             track_inventory_enabled: false,
-            menu_list_id: "",
           });
         }
 
         // Redirect
-        navigate("/menu", { state: { refresh: true } });
+        navigate(`/menu/${menuListId}`, { state: { refresh: true } });
       } catch (err) {
         console.error("Submit error:", err);
         alert(err.message);
       }
     };
-
-
-
 
   const addVariant = () => {
     const newVariant = {

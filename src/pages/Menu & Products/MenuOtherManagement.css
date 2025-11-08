@@ -1,0 +1,222 @@
+.menu-management-container {
+  padding: 24px;
+  
+  min-height: 100vh;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.menu-management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.menu-management-header h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #222;
+}
+
+.add-menu-link {
+  color: #1a73e8;
+  font-size: 14px;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.add-menu-link:hover {
+  text-decoration: underline;
+}
+
+/* Card Style */
+.menu-card {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  width: 85%;
+  max-width: none;
+}
+
+.menu-card-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.menu-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.menu-card-header h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.item-count {
+  font-size: 13px;
+  color: #888;
+  margin-top: 2px;
+}
+
+.edit_btn {
+  background-color: #ecfae4;
+  border: 1px solid #68CF29;
+  padding: 3px;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  color: #68CF29;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+  margin-left: 0 !important;
+}
+
+.edit-btn:hover {
+  color: #1a73e8;
+}
+
+/* Menu Item Box */
+.menu-item {
+  background: #f9f9f9;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  padding: 10px 14px;
+  font-size: 14px;
+  color: #444;
+  width: fit-content;
+}
+
+/* ---------- MODAL ---------- */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal-dialog {
+  background: #fff;
+  border-radius: 8px;
+  width: 420px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.3s ease;
+}
+
+.modal-content {
+  padding: 0;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #f8f8f8;
+  padding: 14px 18px;
+  border-bottom: 1px solid #ddd;
+}
+
+.modal-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.close-btn {
+  border: none;
+  background: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: #555;
+}
+
+.close-btn:hover {
+  color: #e74c3c;
+}
+
+.modal-body {
+  padding: 16px 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.form-control {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px 10px;
+  font-size: 14px;
+}
+
+.form-control:focus {
+  border-color: #1a73e8;
+  outline: none;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 14px 18px;
+  border-top: 1px solid #ddd;
+  background: #fafafa;
+}
+
+.btn {
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancel-btn {
+  background: #f0f0f0;
+}
+
+.cancel-btn:hover {
+  background: #e0e0e0;
+}
+
+.add-btn {
+  background: #1a73e8;
+  color: #fff;
+}
+
+.add-btn:hover {
+  background: #155fc0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
